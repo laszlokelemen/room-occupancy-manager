@@ -1,7 +1,7 @@
 package com.example.roomoccupancymanager.service;
 
-import com.example.roomoccupancymanager.model.RoomOccupancyRequest;
-import com.example.roomoccupancymanager.model.RoomOccupancyResponse;
+import com.example.roomoccupancymanager.payload.RoomOccupancyRequest;
+import com.example.roomoccupancymanager.payload.RoomOccupancyResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

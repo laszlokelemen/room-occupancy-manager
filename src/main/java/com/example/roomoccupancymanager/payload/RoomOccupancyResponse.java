@@ -1,4 +1,4 @@
-package com.example.roomoccupancymanager.model;
+package com.example.roomoccupancymanager.payload;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
