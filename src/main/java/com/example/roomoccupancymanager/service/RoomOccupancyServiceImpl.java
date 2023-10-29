@@ -53,23 +53,23 @@ public class RoomOccupancyServiceImpl implements RoomOccupancyService {
      */
     private List<Double> distributePremiumGuests(int numberOfFreePremiumRooms, List<Double> premiumGuests) {
         List<Double> premiumRoomGuests = new ArrayList<>();
-        for (Double guest : premiumGuests) {
-            if (premiumRoomGuests.size() < numberOfFreePremiumRooms) {
-                premiumRoomGuests.add(guest);
-            }
-        }
+        premiumGuests.stream()
+                .filter(guest -> premiumRoomGuests.size() < numberOfFreePremiumRooms)
+                .forEach(premiumRoomGuests::add);
         return premiumRoomGuests;
     }
 
     /**
-     * Distributes the rest of the guests to the economy rooms based on the number of premium room guests and the number of free premium and economy rooms.
+     * Distributes the rest of the guests to the economy rooms based on the number of premium room guests and the number
+     * of free premium and economy rooms.
      *
      * @param request           the room occupancy request containing the number of free premium and economy rooms
      * @param premiumRoomGuests the list of premium room offers
      * @param economyGuests     the list of economy guests
      * @return the list of economy room guests after distributing the rest of the guests
      */
-    private List<Double> distributeRestOfTheGuests(RoomOccupancyRequest request, List<Double> premiumRoomGuests, List<Double> economyGuests) {
+    private List<Double> distributeRestOfTheGuests(RoomOccupancyRequest request, List<Double> premiumRoomGuests,
+                                                   List<Double> economyGuests) {
         int numberOfFreeEconomyRooms = request.getNumberOfFreeEconomyRooms();
         int economyLeftOverRooms = economyGuests.size() - numberOfFreeEconomyRooms;
         List<Double> economyRoomGuests = new ArrayList<>();
