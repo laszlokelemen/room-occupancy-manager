@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomOccupancyRequest {
-    private List<Double> quests;
+    private List<Double> guests;
     private int numberOfFreeEconomyRooms;
     private int numberOfFreePremiumRooms;
 }
