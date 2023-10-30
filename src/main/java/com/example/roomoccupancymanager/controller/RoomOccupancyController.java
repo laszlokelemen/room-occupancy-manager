@@ -18,10 +18,10 @@ public class RoomOccupancyController {
     }
 
     /**
-     * Retrieves the optimized room occupancy based on the provided request.
+     * Endpoint for optimizing room occupancy.
      *
-     * @param request the room occupancy request
-     * @return the room occupancy response
+     * @param request The room occupancy request.
+     * @return The room occupancy response.
      */
     @PostMapping("/optimize")
     public ResponseEntity<RoomOccupancyResponse> optimize(@Valid @RequestBody RoomOccupancyRequest request) {
