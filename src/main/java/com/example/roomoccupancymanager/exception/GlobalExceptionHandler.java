@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
      * @return a ResponseEntity with the ExceptionDetails as the body
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<?> handleInvalidInput(HttpMessageNotReadableException exception, WebRequest request) {
+    public ResponseEntity<ExceptionDetails> handleInvalidInput(HttpMessageNotReadableException exception, WebRequest request) {
         ExceptionDetails exceptionDetails = ExceptionDetails.builder()
                 .timestamp(new Date())
                 .messages(Collections.singletonList(exception.getMessage()))

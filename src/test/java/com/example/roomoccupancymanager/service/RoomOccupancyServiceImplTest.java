@@ -18,14 +18,14 @@ class RoomOccupancyServiceImplTest {
     private RoomOccupancyServiceImpl occupancyService;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         occupancyRequest = new RoomOccupancyRequest();
         occupancyService = new RoomOccupancyServiceImpl();
         occupancyRequest.setGuests(Arrays.asList(23.0, 45.0, 155.0, 374.0, 22.0, 99.99, 100.0, 101.0, 115.0, 209.0));
     }
 
     @Test
-    public void testOptimize_WithEquallyDistributedRooms() {
+    void testOptimize_WithEquallyDistributedRooms() {
         occupancyRequest.setNumberOfFreeEconomyRooms(3);
         occupancyRequest.setNumberOfFreePremiumRooms(3);
 
@@ -37,7 +37,7 @@ class RoomOccupancyServiceImplTest {
     }
 
     @Test
-    public void testOptimize_WithMoreRoomsThanGuests() {
+    void testOptimize_WithMoreRoomsThanGuests() {
         occupancyRequest.setNumberOfFreePremiumRooms(7);
         occupancyRequest.setNumberOfFreeEconomyRooms(5);
 
@@ -49,7 +49,7 @@ class RoomOccupancyServiceImplTest {
     }
 
     @Test
-    public void testOptimize_WithMoreEcoRoomsThanEcoGuests() {
+    void testOptimize_WithMoreEcoRoomsThanEcoGuests() {
         occupancyRequest.setNumberOfFreePremiumRooms(2);
         occupancyRequest.setNumberOfFreeEconomyRooms(7);
 
@@ -61,7 +61,7 @@ class RoomOccupancyServiceImplTest {
     }
 
     @Test
-    public void testOptimize_WithOneEcoGuestGoesToPremiumRoom() {
+    void testOptimize_WithOneEcoGuestGoesToPremiumRoom() {
         occupancyRequest.setNumberOfFreePremiumRooms(7);
         occupancyRequest.setNumberOfFreeEconomyRooms(1);
 
@@ -73,7 +73,7 @@ class RoomOccupancyServiceImplTest {
     }
 
     @Test
-    public void testOptimize_WithNoQuests() {
+    void testOptimize_WithNoQuests() {
         occupancyRequest.setGuests(List.of());
         RoomOccupancyResponse response = occupancyService.optimize(occupancyRequest);
         assertEquals(0, response.getNumberOfOccupiedEconomyRooms());
