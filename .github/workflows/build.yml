@@ -20,12 +20,7 @@ jobs:
           cache: 'gradle'
       - name: Build
         run: ./gradlew build --info
-      - name: Upload build reports
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-reports
-          path: build/reports
-      - name: Analyze
+      - name: SonarCloud scan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
