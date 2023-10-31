@@ -1,4 +1,4 @@
-# Room Optimization Manager
+# Room Occupancy Manager
 
 [![Build Status](https://github.com/laszlokelemen/room-occupancy-manager/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/laszlokelemen/room-occupancy-manager)
 
