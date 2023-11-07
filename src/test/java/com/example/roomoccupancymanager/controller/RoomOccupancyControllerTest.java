@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,7 +41,18 @@ class RoomOccupancyControllerTest {
     @Test
     public void testOptimize_WithValidRequest() throws Exception {
         RoomOccupancyRequest request = new RoomOccupancyRequest();
-        request.setGuests(Arrays.asList(23.0, 45.0, 155.0, 374.0, 22.0, 99.99, 100.0, 101.0, 115.0, 209.0));
+        request.setGuests(Arrays.asList(
+                BigDecimal.valueOf(23),
+                BigDecimal.valueOf(45),
+                BigDecimal.valueOf(155),
+                BigDecimal.valueOf(374),
+                BigDecimal.valueOf(22),
+                BigDecimal.valueOf(99.99),
+                BigDecimal.valueOf(100),
+                BigDecimal.valueOf(101),
+                BigDecimal.valueOf(115),
+                BigDecimal.valueOf(209)
+        ));
         request.setNumberOfFreePremiumRooms(7);
         request.setNumberOfFreeEconomyRooms(2);
 

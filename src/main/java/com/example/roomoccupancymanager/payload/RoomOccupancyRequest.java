@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,11 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomOccupancyRequest {
-    private List<Double> guests;
+    private List<BigDecimal> guests;
     private int numberOfFreeEconomyRooms;
     private int numberOfFreePremiumRooms;
 
-    public List<Double> getGuests() {
+    public List<BigDecimal> getGuests() {
         return guests != null ? guests : Collections.emptyList();
     }
 }

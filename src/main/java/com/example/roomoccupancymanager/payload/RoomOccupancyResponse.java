@@ -1,14 +1,12 @@
 package com.example.roomoccupancymanager.payload;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class RoomOccupancyResponse {
     @JsonProperty("usagePremium")
@@ -16,7 +14,7 @@ public class RoomOccupancyResponse {
     @JsonProperty("usageEconomy")
     private int numberOfOccupiedEconomyRooms;
     @JsonProperty("pricePremium")
-    private double priceOfPremiumRooms;
+    private BigDecimal priceOfPremiumRooms;
     @JsonProperty("priceEconomy")
-    private double priceOfEconomyRooms;
+    private BigDecimal priceOfEconomyRooms;
 }

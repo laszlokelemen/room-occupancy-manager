@@ -4,13 +4,14 @@ import com.example.roomoccupancymanager.payload.RoomOccupancyRequest;
 import com.example.roomoccupancymanager.payload.RoomOccupancyResponse;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 @Service
 public class RoomOccupancyServiceImpl implements RoomOccupancyService {
-    private static final int MAX_ECONOMY_PAYMENT = 100;
+    private static final BigDecimal MAX_ECONOMY_PAYMENT = BigDecimal.valueOf(100);
 
     /**
      * Optimizes the room occupancy based on the given request.
@@ -20,27 +21,28 @@ public class RoomOccupancyServiceImpl implements RoomOccupancyService {
      */
     @Override
     public RoomOccupancyResponse optimize(RoomOccupancyRequest request) {
-        List<Double> guests = new ArrayList<>(request.getGuests());
+        List<BigDecimal> guests = new ArrayList<>(request.getGuests());
         guests.sort(Comparator.reverseOrder());
 
-        List<Double> premiumGuests = guests
+        List<BigDecimal> premiumGuests = guests
                 .stream()
-                .filter(guest -> guest >= MAX_ECONOMY_PAYMENT)
+                .filter(guest -> guest.compareTo(MAX_ECONOMY_PAYMENT) >= 0)
                 .toList();
-        List<Double> premiumRoomGuests = distributePremiumGuests(request.getNumberOfFreePremiumRooms(), premiumGuests);
+        List<BigDecimal> premiumRoomGuests = distributePremiumGuests(request.getNumberOfFreePremiumRooms(),
+                premiumGuests);
 
-        List<Double> economyGuests = guests
+        List<BigDecimal> economyGuests = guests
                 .stream()
-                .filter(guest -> guest < MAX_ECONOMY_PAYMENT)
+                .filter(guest -> guest.compareTo(MAX_ECONOMY_PAYMENT) < 0)
                 .toList();
 
-        List<Double> economyRoomGuests = distributeRestOfTheGuests(request, premiumRoomGuests, economyGuests);
+        List<BigDecimal> economyRoomGuests = distributeRestOfTheGuests(request, premiumRoomGuests, economyGuests);
 
         return RoomOccupancyResponse.builder()
                 .numberOfOccupiedPremiumRooms(premiumRoomGuests.size())
                 .numberOfOccupiedEconomyRooms(economyRoomGuests.size())
-                .priceOfPremiumRooms(premiumRoomGuests.stream().mapToDouble(Double::doubleValue).sum())
-                .priceOfEconomyRooms(economyRoomGuests.stream().mapToDouble(Double::doubleValue).sum())
+                .priceOfPremiumRooms(premiumRoomGuests.stream().reduce(BigDecimal.ZERO, BigDecimal::add))
+                .priceOfEconomyRooms(economyRoomGuests.stream().reduce(BigDecimal.ZERO, BigDecimal::add))
                 .build();
     }
 
@@ -51,8 +53,8 @@ public class RoomOccupancyServiceImpl implements RoomOccupancyService {
      * @param premiumGuests            the list of premium guests
      * @return the list of premium room guests
      */
-    private List<Double> distributePremiumGuests(int numberOfFreePremiumRooms, List<Double> premiumGuests) {
-        List<Double> premiumRoomGuests = new ArrayList<>();
+    private List<BigDecimal> distributePremiumGuests(int numberOfFreePremiumRooms, List<BigDecimal> premiumGuests) {
+        List<BigDecimal> premiumRoomGuests = new ArrayList<>();
         premiumGuests.stream()
                 .filter(guest -> premiumRoomGuests.size() < numberOfFreePremiumRooms)
                 .forEach(premiumRoomGuests::add);
@@ -68,13 +70,13 @@ public class RoomOccupancyServiceImpl implements RoomOccupancyService {
      * @param economyGuests     the list of economy guests
      * @return the list of economy room guests after distributing the rest of the guests
      */
-    private List<Double> distributeRestOfTheGuests(RoomOccupancyRequest request, List<Double> premiumRoomGuests,
-                                                   List<Double> economyGuests) {
+    private List<BigDecimal> distributeRestOfTheGuests(RoomOccupancyRequest request, List<BigDecimal> premiumRoomGuests,
+                                                       List<BigDecimal> economyGuests) {
         int numberOfFreeEconomyRooms = request.getNumberOfFreeEconomyRooms();
         int economyLeftOverRooms = economyGuests.size() - numberOfFreeEconomyRooms;
-        List<Double> economyRoomGuests = new ArrayList<>();
+        List<BigDecimal> economyRoomGuests = new ArrayList<>();
 
-        for (Double guest : economyGuests) {
+        for (BigDecimal guest : economyGuests) {
             if (economyLeftOverRooms > 0 && premiumRoomGuests.size() < request.getNumberOfFreePremiumRooms()) {
                 premiumRoomGuests.add(guest);
                 economyLeftOverRooms--;
