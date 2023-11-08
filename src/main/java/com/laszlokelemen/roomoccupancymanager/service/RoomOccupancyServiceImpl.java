@@ -1,7 +1,7 @@
 package com.laszlokelemen.roomoccupancymanager.service;
 
-import com.laszlokelemen.roomoccupancymanager.payload.RoomOccupancyRequest;
-import com.laszlokelemen.roomoccupancymanager.payload.RoomOccupancyResponse;
+import com.laszlokelemen.roomoccupancymanager.payloads.RoomOccupancyRequest;
+import com.laszlokelemen.roomoccupancymanager.payloads.RoomOccupancyResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

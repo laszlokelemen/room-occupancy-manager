@@ -1,7 +1,7 @@
 package com.laszlokelemen.roomoccupancymanager.controller;
 
-import com.laszlokelemen.roomoccupancymanager.payload.RoomOccupancyRequest;
-import com.laszlokelemen.roomoccupancymanager.payload.RoomOccupancyResponse;
+import com.laszlokelemen.roomoccupancymanager.payloads.RoomOccupancyRequest;
+import com.laszlokelemen.roomoccupancymanager.payloads.RoomOccupancyResponse;
 import com.laszlokelemen.roomoccupancymanager.service.RoomOccupancyService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

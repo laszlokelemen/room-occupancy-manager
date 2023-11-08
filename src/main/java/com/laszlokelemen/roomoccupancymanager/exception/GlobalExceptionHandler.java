@@ -25,20 +25,26 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ExceptionDetails> handleInvalidInput(HttpMessageNotReadableException exception,
                                                                WebRequest request) {
-        var exceptionDetails = new ExceptionDetails(
-                LocalDate.now(),
-                Collections.singletonList(exception.getMessage()),
-                request.getDescription(false)
-        );
-        return ResponseEntity.badRequest().body(exceptionDetails);
+        return getExceptionDetailsResponseEntity(exception.getMessage(), request);
     }
 
+    /**
+     * Handles the exception when method arguments are not valid.
+     *
+     * @param exception the MethodArgumentNotValidException
+     * @param request   the WebRequest
+     * @return the ResponseEntity containing the exception details
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionDetails> handleInvalidArgument(MethodArgumentNotValidException exception,
                                                                   WebRequest request) {
+        return getExceptionDetailsResponseEntity(exception.getMessage(), request);
+    }
+
+    private static ResponseEntity<ExceptionDetails> getExceptionDetailsResponseEntity(String exception, WebRequest request) {
         var exceptionDetails = new ExceptionDetails(
                 LocalDate.now(),
-                Collections.singletonList(exception.getMessage()),
+                Collections.singletonList(exception),
                 request.getDescription(false)
         );
         return ResponseEntity.badRequest().body(exceptionDetails);

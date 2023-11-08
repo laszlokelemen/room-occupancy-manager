@@ -1,7 +1,7 @@
 package com.laszlokelemen.roomoccupancymanager.service;
 
-import com.laszlokelemen.roomoccupancymanager.payload.RoomOccupancyRequest;
-import com.laszlokelemen.roomoccupancymanager.payload.RoomOccupancyResponse;
+import com.laszlokelemen.roomoccupancymanager.payloads.RoomOccupancyRequest;
+import com.laszlokelemen.roomoccupancymanager.payloads.RoomOccupancyResponse;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;

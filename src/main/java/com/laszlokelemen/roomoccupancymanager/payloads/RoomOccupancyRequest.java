@@ -1,4 +1,4 @@
-package com.laszlokelemen.roomoccupancymanager.payload;
+package com.laszlokelemen.roomoccupancymanager.payloads;
 
 import com.laszlokelemen.roomoccupancymanager.validator.PositiveNumbers;
 

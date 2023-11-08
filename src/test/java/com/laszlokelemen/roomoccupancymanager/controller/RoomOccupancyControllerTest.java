@@ -23,6 +23,12 @@ class RoomOccupancyControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    /**
+     * Test the optimize function with a valid request.
+     *
+     * @param requestBody the JSON request body
+     * @throws Exception if an error occurs during the test
+     */
     @ParameterizedTest
     @ValueSource(strings = {"{}", "{" +
             "\"guests\":[23,45,155,374,22,99.99,100,101,115,209]," +
@@ -36,6 +42,11 @@ class RoomOccupancyControllerTest {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Test case for the optimize function when a negative number is present in the request.
+     *
+     * @throws Exception if an exception occurs during the test
+     */
     @Test
     public void testOptimize_WithNegativeNumberInRequest() throws Exception {
         String requestBody = "{" +
