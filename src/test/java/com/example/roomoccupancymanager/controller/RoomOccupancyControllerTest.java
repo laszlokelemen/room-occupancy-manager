@@ -2,6 +2,8 @@ package com.example.roomoccupancymanager.controller;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,22 +23,13 @@ class RoomOccupancyControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    public void testOptimize_WithEmptyRequest() throws Exception {
-        mockMvc.perform(post(URI)
-                        .contentType(JSON_CONTENT_TYPE)
-                        .content("{}"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void testOptimize_WithValidRequest() throws Exception {
-        String requestBody = "{" +
-                "\"guests\":[23,45,155,374,22,99.99,100,101,115,209]," +
-                "\"numberOfFreeEconomyRooms\":2," +
-                "\"numberOfFreePremiumRooms\":7" +
-                "}";
-
+    @ParameterizedTest
+    @ValueSource(strings = {"{}", "{" +
+            "\"guests\":[23,45,155,374,22,99.99,100,101,115,209]," +
+            "\"numberOfFreeEconomyRooms\":2," +
+            "\"numberOfFreePremiumRooms\":7" +
+            "}"})
+    public void testOptimize_WithValidRequest(String requestBody) throws Exception {
         mockMvc.perform(post(URI)
                         .contentType(JSON_CONTENT_TYPE)
                         .content(requestBody))
