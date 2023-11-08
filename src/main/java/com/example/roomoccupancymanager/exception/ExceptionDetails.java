@@ -1,7 +1,7 @@
 package com.example.roomoccupancymanager.exception;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-public record ExceptionDetails(Date timestamp, List<String> messages, String path) {
+public record ExceptionDetails(LocalDate timestamp, List<String> messages, String path) {
 }

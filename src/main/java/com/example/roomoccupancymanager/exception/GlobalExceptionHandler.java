@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Date;
 
 
 @Slf4j
@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionDetails> handleInvalidInput(HttpMessageNotReadableException exception,
                                                                WebRequest request) {
         ExceptionDetails exceptionDetails = new ExceptionDetails(
-                new Date(),
+                LocalDate.now(),
                 Collections.singletonList(exception.getMessage()),
                 request.getDescription(false)
         );
