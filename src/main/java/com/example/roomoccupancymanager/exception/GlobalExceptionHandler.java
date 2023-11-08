@@ -10,6 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.Collections;
 import java.util.Date;
 
+
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -21,12 +22,14 @@ public class GlobalExceptionHandler {
      * @return a ResponseEntity with the ExceptionDetails as the body
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ExceptionDetails> handleInvalidInput(HttpMessageNotReadableException exception, WebRequest request) {
-        ExceptionDetails exceptionDetails = ExceptionDetails.builder()
-                .timestamp(new Date())
-                .messages(Collections.singletonList(exception.getMessage()))
-                .path(request.getDescription(false))
-                .build();
+    public ResponseEntity<ExceptionDetails> handleInvalidInput(HttpMessageNotReadableException exception,
+                                                               WebRequest request) {
+        ExceptionDetails exceptionDetails = new ExceptionDetails(
+                new Date(),
+                Collections.singletonList(exception.getMessage()),
+                request.getDescription(false)
+        );
         return ResponseEntity.badRequest().body(exceptionDetails);
     }
+
 }
