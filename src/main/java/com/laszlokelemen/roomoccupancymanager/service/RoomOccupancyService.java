@@ -1,7 +1,7 @@
-package com.example.roomoccupancymanager.service;
+package com.laszlokelemen.roomoccupancymanager.service;
 
-import com.example.roomoccupancymanager.payload.RoomOccupancyRequest;
-import com.example.roomoccupancymanager.payload.RoomOccupancyResponse;
+import com.laszlokelemen.roomoccupancymanager.payload.RoomOccupancyRequest;
+import com.laszlokelemen.roomoccupancymanager.payload.RoomOccupancyResponse;
 
 public interface RoomOccupancyService {
     /**

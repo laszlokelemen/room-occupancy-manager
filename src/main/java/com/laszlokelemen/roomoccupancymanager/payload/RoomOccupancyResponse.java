@@ -1,4 +1,4 @@
-package com.example.roomoccupancymanager.payload;
+package com.laszlokelemen.roomoccupancymanager.payload;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

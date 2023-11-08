@@ -1,4 +1,4 @@
-package com.example.roomoccupancymanager;
+package com.laszlokelemen.roomoccupancymanager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,6 +1,6 @@
-package com.example.roomoccupancymanager.payload;
+package com.laszlokelemen.roomoccupancymanager.payload;
 
-import validator.PositiveNumbers;
+import com.laszlokelemen.roomoccupancymanager.validator.PositiveNumbers;
 
 import java.math.BigDecimal;
 import java.util.Collections;

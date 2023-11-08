@@ -1,4 +1,4 @@
-package com.example.roomoccupancymanager.exception;
+package com.laszlokelemen.roomoccupancymanager.exception;
 
 import java.time.LocalDate;
 import java.util.List;

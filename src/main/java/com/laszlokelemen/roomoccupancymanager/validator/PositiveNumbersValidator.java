@@ -1,4 +1,4 @@
-package validator;
+package com.laszlokelemen.roomoccupancymanager.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

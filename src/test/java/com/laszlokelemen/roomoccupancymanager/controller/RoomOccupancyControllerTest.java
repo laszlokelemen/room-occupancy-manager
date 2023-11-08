@@ -1,4 +1,4 @@
-package com.example.roomoccupancymanager.controller;
+package com.laszlokelemen.roomoccupancymanager.controller;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
