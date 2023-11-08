@@ -42,4 +42,18 @@ class RoomOccupancyControllerTest {
                         .content(requestBody))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void testOptimize_WithNegativeNumberInRequest() throws Exception {
+        String requestBody = "{" +
+                "\"guests\":[-23,45,155,374,22,99.99,100,101,115,209]," +
+                "\"numberOfFreeEconomyRooms\":2," +
+                "\"numberOfFreePremiumRooms\":7" +
+                "}";
+
+        mockMvc.perform(post(URI)
+                        .contentType(JSON_CONTENT_TYPE)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest());
+    }
 }

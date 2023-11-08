@@ -3,6 +3,7 @@ package com.example.roomoccupancymanager.exception;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -24,7 +25,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ExceptionDetails> handleInvalidInput(HttpMessageNotReadableException exception,
                                                                WebRequest request) {
-        ExceptionDetails exceptionDetails = new ExceptionDetails(
+        var exceptionDetails = new ExceptionDetails(
                 LocalDate.now(),
                 Collections.singletonList(exception.getMessage()),
                 request.getDescription(false)
@@ -32,4 +33,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(exceptionDetails);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ExceptionDetails> handleInvalidArgument(MethodArgumentNotValidException exception,
+                                                                  WebRequest request) {
+        var exceptionDetails = new ExceptionDetails(
+                LocalDate.now(),
+                Collections.singletonList(exception.getMessage()),
+                request.getDescription(false)
+        );
+        return ResponseEntity.badRequest().body(exceptionDetails);
+    }
 }
