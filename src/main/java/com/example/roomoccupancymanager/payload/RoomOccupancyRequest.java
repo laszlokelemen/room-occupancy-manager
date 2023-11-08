@@ -1,21 +1,16 @@
 package com.example.roomoccupancymanager.payload;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class RoomOccupancyRequest {
-    private List<BigDecimal> guests;
-    private int numberOfFreeEconomyRooms;
-    private int numberOfFreePremiumRooms;
-
+public record RoomOccupancyRequest(List<BigDecimal> guests, int numberOfFreeEconomyRooms,
+                                   int numberOfFreePremiumRooms) {
+    /**
+     * Retrieves the list of guests.
+     *
+     * @return  the list of guests, or an empty list if there are no guests
+     */
     public List<BigDecimal> getGuests() {
         return guests != null ? guests : Collections.emptyList();
     }

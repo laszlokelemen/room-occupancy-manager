@@ -21,29 +21,27 @@ public class RoomOccupancyServiceImpl implements RoomOccupancyService {
      */
     @Override
     public RoomOccupancyResponse optimize(RoomOccupancyRequest request) {
-        List<BigDecimal> guests = new ArrayList<>(request.getGuests());
+        var guests = new ArrayList<>(request.getGuests());
         guests.sort(Comparator.reverseOrder());
 
-        List<BigDecimal> premiumGuests = guests
-                .stream()
+        var premiumGuests = guests.stream()
                 .filter(guest -> guest.compareTo(MAX_ECONOMY_PAYMENT) >= 0)
                 .toList();
-        List<BigDecimal> premiumRoomGuests = distributePremiumGuests(request.getNumberOfFreePremiumRooms(),
+        var premiumRoomGuests = distributePremiumGuests(request.numberOfFreePremiumRooms(),
                 premiumGuests);
 
-        List<BigDecimal> economyGuests = guests
-                .stream()
+        var economyGuests = guests.stream()
                 .filter(guest -> guest.compareTo(MAX_ECONOMY_PAYMENT) < 0)
                 .toList();
+        var economyRoomGuests = distributeRestOfTheGuests(request, premiumRoomGuests, economyGuests);
 
-        List<BigDecimal> economyRoomGuests = distributeRestOfTheGuests(request, premiumRoomGuests, economyGuests);
+        var totalPremiumPayment = premiumRoomGuests.stream()
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        var totalEconomyPayment = economyRoomGuests.stream()
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        return RoomOccupancyResponse.builder()
-                .numberOfOccupiedPremiumRooms(premiumRoomGuests.size())
-                .numberOfOccupiedEconomyRooms(economyRoomGuests.size())
-                .priceOfPremiumRooms(premiumRoomGuests.stream().reduce(BigDecimal.ZERO, BigDecimal::add))
-                .priceOfEconomyRooms(economyRoomGuests.stream().reduce(BigDecimal.ZERO, BigDecimal::add))
-                .build();
+        return new RoomOccupancyResponse(premiumRoomGuests.size(), economyRoomGuests.size(),
+                totalPremiumPayment, totalEconomyPayment);
     }
 
     /**
@@ -72,12 +70,12 @@ public class RoomOccupancyServiceImpl implements RoomOccupancyService {
      */
     private List<BigDecimal> distributeRestOfTheGuests(RoomOccupancyRequest request, List<BigDecimal> premiumRoomGuests,
                                                        List<BigDecimal> economyGuests) {
-        int numberOfFreeEconomyRooms = request.getNumberOfFreeEconomyRooms();
-        int economyLeftOverRooms = economyGuests.size() - numberOfFreeEconomyRooms;
+        var numberOfFreeEconomyRooms = request.numberOfFreeEconomyRooms();
+        var economyLeftOverRooms = economyGuests.size() - numberOfFreeEconomyRooms;
         List<BigDecimal> economyRoomGuests = new ArrayList<>();
 
         for (BigDecimal guest : economyGuests) {
-            if (economyLeftOverRooms > 0 && premiumRoomGuests.size() < request.getNumberOfFreePremiumRooms()) {
+            if (economyLeftOverRooms > 0 && premiumRoomGuests.size() < request.numberOfFreePremiumRooms()) {
                 premiumRoomGuests.add(guest);
                 economyLeftOverRooms--;
             } else if (economyRoomGuests.size() < numberOfFreeEconomyRooms) {

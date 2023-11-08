@@ -2,8 +2,8 @@ package com.example.roomoccupancymanager.service;
 
 import com.example.roomoccupancymanager.payload.RoomOccupancyRequest;
 import com.example.roomoccupancymanager.payload.RoomOccupancyResponse;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Spy;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
@@ -16,14 +16,68 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class RoomOccupancyServiceImplTest {
 
     private RoomOccupancyRequest occupancyRequest;
+
+    @Spy
     private RoomOccupancyServiceImpl occupancyService;
 
-    @BeforeEach
-    void setup() {
-        occupancyRequest = new RoomOccupancyRequest();
-        occupancyService = new RoomOccupancyServiceImpl();
 
-        List<BigDecimal> guests = Arrays.asList(
+    @Test
+    void testOptimize_WithEquallyDistributedRooms() {
+        occupancyRequest = new RoomOccupancyRequest(getGuests(), 3, 3);
+
+        RoomOccupancyResponse response = occupancyService.optimize(occupancyRequest);
+        assertEquals(3, response.numberOfOccupiedPremiumRooms());
+        assertEquals(3, response.numberOfOccupiedPremiumRooms());
+        assertEquals(BigDecimal.valueOf(738), response.priceOfPremiumRooms());
+        assertEquals(BigDecimal.valueOf(167.99), response.priceOfEconomyRooms());
+    }
+
+    @Test
+    void testOptimize_WithMoreRoomsThanGuests() {
+        occupancyRequest = new RoomOccupancyRequest(getGuests(), 5, 7);
+
+        RoomOccupancyResponse response = occupancyService.optimize(occupancyRequest);
+        assertEquals(6, response.numberOfOccupiedPremiumRooms());
+        assertEquals(4, response.numberOfOccupiedEconomyRooms());
+        assertEquals(BigDecimal.valueOf(1054), response.priceOfPremiumRooms());
+        assertEquals(BigDecimal.valueOf(189.99), response.priceOfEconomyRooms());
+    }
+
+    @Test
+    void testOptimize_WithMoreEcoRoomsThanEcoGuests() {
+        occupancyRequest = new RoomOccupancyRequest(getGuests(), 7, 2);
+
+        RoomOccupancyResponse response = occupancyService.optimize(occupancyRequest);
+        assertEquals(2, response.numberOfOccupiedPremiumRooms());
+        assertEquals(4, response.numberOfOccupiedEconomyRooms());
+        assertEquals(BigDecimal.valueOf(583), response.priceOfPremiumRooms());
+        assertEquals(BigDecimal.valueOf(189.99), response.priceOfEconomyRooms());
+    }
+
+    @Test
+    void testOptimize_WithOneEcoGuestGoesToPremiumRoom() {
+        occupancyRequest = new RoomOccupancyRequest(getGuests(), 1, 7);
+
+        RoomOccupancyResponse response = occupancyService.optimize(occupancyRequest);
+        assertEquals(7, response.numberOfOccupiedPremiumRooms());
+        assertEquals(1, response.numberOfOccupiedEconomyRooms());
+        assertEquals(BigDecimal.valueOf(1153.99), response.priceOfPremiumRooms());
+        assertEquals(BigDecimal.valueOf(45), response.priceOfEconomyRooms());
+    }
+
+    @Test
+    void testOptimize_WithNoQuests() {
+        occupancyRequest = new RoomOccupancyRequest(getGuests(), 0, 0);
+
+        RoomOccupancyResponse response = occupancyService.optimize(occupancyRequest);
+        assertEquals(0, response.numberOfOccupiedEconomyRooms());
+        assertEquals(0, response.numberOfOccupiedPremiumRooms());
+        assertEquals(BigDecimal.valueOf(0), response.priceOfPremiumRooms());
+        assertEquals(BigDecimal.valueOf(0), response.priceOfEconomyRooms());
+    }
+
+    private static List<BigDecimal> getGuests() {
+        return Arrays.asList(
                 BigDecimal.valueOf(23),
                 BigDecimal.valueOf(45),
                 BigDecimal.valueOf(155),
@@ -35,65 +89,5 @@ class RoomOccupancyServiceImplTest {
                 BigDecimal.valueOf(115),
                 BigDecimal.valueOf(209)
         );
-
-        occupancyRequest.setGuests(guests);
-    }
-
-    @Test
-    void testOptimize_WithEquallyDistributedRooms() {
-        occupancyRequest.setNumberOfFreeEconomyRooms(3);
-        occupancyRequest.setNumberOfFreePremiumRooms(3);
-
-        RoomOccupancyResponse response = occupancyService.optimize(occupancyRequest);
-        assertEquals(3, response.getNumberOfOccupiedEconomyRooms());
-        assertEquals(3, response.getNumberOfOccupiedPremiumRooms());
-        assertEquals(BigDecimal.valueOf(738), response.getPriceOfPremiumRooms());
-        assertEquals(BigDecimal.valueOf(167.99), response.getPriceOfEconomyRooms());
-    }
-
-    @Test
-    void testOptimize_WithMoreRoomsThanGuests() {
-        occupancyRequest.setNumberOfFreePremiumRooms(7);
-        occupancyRequest.setNumberOfFreeEconomyRooms(5);
-
-        RoomOccupancyResponse response = occupancyService.optimize(occupancyRequest);
-        assertEquals(6, response.getNumberOfOccupiedPremiumRooms());
-        assertEquals(4, response.getNumberOfOccupiedEconomyRooms());
-        assertEquals(BigDecimal.valueOf(1054), response.getPriceOfPremiumRooms());
-        assertEquals(BigDecimal.valueOf(189.99), response.getPriceOfEconomyRooms());
-    }
-
-    @Test
-    void testOptimize_WithMoreEcoRoomsThanEcoGuests() {
-        occupancyRequest.setNumberOfFreePremiumRooms(2);
-        occupancyRequest.setNumberOfFreeEconomyRooms(7);
-
-        RoomOccupancyResponse response = occupancyService.optimize(occupancyRequest);
-        assertEquals(2, response.getNumberOfOccupiedPremiumRooms());
-        assertEquals(4, response.getNumberOfOccupiedEconomyRooms());
-        assertEquals(BigDecimal.valueOf(583), response.getPriceOfPremiumRooms());
-        assertEquals(BigDecimal.valueOf(189.99), response.getPriceOfEconomyRooms());
-    }
-
-    @Test
-    void testOptimize_WithOneEcoGuestGoesToPremiumRoom() {
-        occupancyRequest.setNumberOfFreePremiumRooms(7);
-        occupancyRequest.setNumberOfFreeEconomyRooms(1);
-
-        RoomOccupancyResponse response = occupancyService.optimize(occupancyRequest);
-        assertEquals(7, response.getNumberOfOccupiedPremiumRooms());
-        assertEquals(1, response.getNumberOfOccupiedEconomyRooms());
-        assertEquals(BigDecimal.valueOf(1153.99), response.getPriceOfPremiumRooms());
-        assertEquals(BigDecimal.valueOf(45), response.getPriceOfEconomyRooms());
-    }
-
-    @Test
-    void testOptimize_WithNoQuests() {
-        occupancyRequest.setGuests(List.of());
-        RoomOccupancyResponse response = occupancyService.optimize(occupancyRequest);
-        assertEquals(0, response.getNumberOfOccupiedEconomyRooms());
-        assertEquals(0, response.getNumberOfOccupiedPremiumRooms());
-        assertEquals(BigDecimal.valueOf(0), response.getPriceOfPremiumRooms());
-        assertEquals(BigDecimal.valueOf(0), response.getPriceOfEconomyRooms());
     }
 }
